@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { SidebarStateService } from '../sidebar-state.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
 
@@ -9,13 +10,9 @@ import { Router } from '@angular/router';
   templateUrl: './header.html'
 })
 export class Header {
+  private sidebarState = inject(SidebarStateService);
   private authService = inject(AuthService);
   private router = inject(Router);
-
-  logout() {
-    this.authService.logout();
-    this.router.navigate(['/login']);
-  }
 
   usuarioActual = {
     nombre: 'Rubén Gómez',
@@ -24,4 +21,13 @@ export class Header {
   };
 
   empresaActual = 'Empresa 1';
+
+  toggleSidebar() {
+    this.sidebarState.toggle();
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
 }

@@ -1,14 +1,18 @@
-import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { NgTemplateOutlet } from '@angular/common';
+import { SidebarStateService } from '../sidebar-state.service';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive], 
+  imports: [RouterLink, NgTemplateOutlet],
   templateUrl: './sidebar.html'
 })
 export class Sidebar {
-  
+  sidebarState = inject(SidebarStateService);
 
-
+  close() {
+    this.sidebarState.close();
+  }
 }
