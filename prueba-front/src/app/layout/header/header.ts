@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { SidebarStateService } from '../sidebar-state.service';
 
 @Component({
   selector: 'app-header',
@@ -7,6 +8,7 @@ import { Component } from '@angular/core';
   templateUrl: './header.html'
 })
 export class Header {
+  private sidebarState = inject(SidebarStateService);
 
   usuarioActual = {
     nombre: 'Rubén Gómez',
@@ -15,4 +17,8 @@ export class Header {
   };
 
   empresaActual = 'Empresa 1';
+
+  toggleSidebar() {
+    this.sidebarState.toggle();
+  }
 }
