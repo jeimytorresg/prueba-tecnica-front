@@ -1,5 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { SidebarStateService } from '../sidebar-state.service';
+import { AuthService } from '../../core/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -9,6 +11,8 @@ import { SidebarStateService } from '../sidebar-state.service';
 })
 export class Header {
   private sidebarState = inject(SidebarStateService);
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
   usuarioActual = {
     nombre: 'Rubén Gómez',
@@ -20,5 +24,10 @@ export class Header {
 
   toggleSidebar() {
     this.sidebarState.toggle();
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }
