@@ -9,8 +9,8 @@
 
 1. **Clonar el repositorio:**
 ```bash
-   git clone [URL_DE_TU_REPOSITORIO]
-   cd [NOMBRE_DE_LA_CARPETA_DEL_PROYECTO]
+   git clone https://github.com/jeimytorresg/prueba-tecnica-front.git
+   cd prueba-front
    ```
 2. **Instalar las dependencias:**
 
