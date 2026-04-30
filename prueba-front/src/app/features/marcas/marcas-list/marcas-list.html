@@ -29,7 +29,7 @@
       </div>
 
 
-      <button class="bg-primary hover:bg-red-700 text-white px-5 py-2 rounded-full text-sm font-semibold flex items-center gap-2 transition-colors shadow-sm">
+      <button (click)="abrirModalNuevo()" class="bg-primary hover:bg-red-700 text-white px-5 py-2 rounded-full text-sm font-semibold flex items-center gap-2 transition-colors shadow-sm">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
         Nueva Marca
       </button>
@@ -80,10 +80,10 @@
 
             <td class="py-4 px-4">
               <div class="flex justify-end gap-3">
-                <button class="text-gray-400 hover:text-gray-700 transition-colors">
+                <button (click)="abrirModalEditar(marca)" class="text-gray-400 hover:text-gray-700 transition-colors">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                 </button>
-                <button class="text-primary hover:text-red-700 transition-colors">
+                <button (click)="abrirModalEliminar(marca)" class="text-primary hover:text-red-700 transition-colors">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                 </button>
               </div>
@@ -119,4 +119,157 @@
     </div>
   </div>
 
+  <!-- ================= MODAL ELIMINAR MARCA ================= -->
+  @if (mostrarModalEliminar) {
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-40 backdrop-blur-sm transition-opacity">
+      
+      <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center mx-4">
+        <h3 class="text-xl font-bold text-gray-800 mb-6">Eliminar marca</h3>
+        
+        <!-- Icono de Advertencia -->
+        <div class="w-16 h-16 bg-yellow-50 rounded-2xl flex items-center justify-center mx-auto mb-6">
+          <svg class="w-8 h-8 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+        </div>
+
+        <p class="font-bold text-gray-800 mb-4">¿Estás seguro de que deseas eliminar esta marca?</p>
+        
+        <!-- Nombre de la marca a eliminar -->
+        <div class="bg-gray-50 py-2 px-4 rounded-lg inline-block mb-4 text-sm font-semibold text-gray-700 border border-gray-100">
+          {{ marcaSeleccionada?.nombre }}
+        </div>
+
+        <p class="text-sm text-gray-500 mb-8 px-4">
+          Esta acción hará que la marca ya no esté disponible ni visible en el sistema.
+        </p>
+
+        <!-- Botones -->
+        <div class="flex justify-center gap-4">
+          <button (click)="cerrarModales()" class="flex items-center gap-2 px-6 py-2.5 rounded-full text-primary font-semibold hover:bg-red-50 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            Cancelar
+          </button>
+          <button (click)="confirmarEliminacion()" class="flex items-center gap-2 px-6 py-2.5 rounded-full bg-primary text-white font-semibold hover:bg-red-700 transition-colors shadow-md">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+            Eliminar Marca
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+
+
+  @if (mostrarModalFormulario) {
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-40 backdrop-blur-sm p-4">
+      
+      <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden">
+        
+
+        <div class="flex justify-between items-start p-6 pb-2">
+          <div>
+            <h2 class="text-xl font-bold text-gray-800">
+              {{ modoEdicion ? 'Editar marca' : 'Nueva marca' }}
+            </h2>
+            <p class="text-sm text-gray-500 mt-1">
+              {{ modoEdicion ? 'Actualiza la información o descuentos asignados a esta marca.' : 'Registra una nueva marca para clasificar y organizar tus productos dentro del sistema.' }}
+            </p>
+          </div>
+          <button (click)="cerrarModales()" class="text-gray-400 hover:text-gray-700 p-1">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          </button>
+        </div>
+
+
+        <div class="p-6 overflow-y-auto flex-1">
+          <form [formGroup]="marcaForm" class="space-y-8">
+
+            <div>
+              <h3 class="text-sm font-bold text-gray-700 border-b border-gray-200 pb-2 mb-4">Información general</h3>
+              
+              <div class="space-y-4">
+                <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
+                  <label class="md:w-1/4 text-sm font-medium text-gray-500">Nombre de la marca</label>
+                  <div class="flex-1">
+                    <input type="text" formControlName="nombre" placeholder="Ej. Nestlé"
+                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-primary focus:border-primary outline-none"
+                      [ngClass]="{'border-red-500': marcaForm.get('nombre')?.invalid && marcaForm.get('nombre')?.touched}">
+                  </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row gap-2 md:gap-4">
+                  <label class="md:w-1/4 text-sm font-medium text-gray-500 mt-2">Descripción</label>
+                  <div class="flex-1">
+                    <textarea formControlName="descripcion" rows="3" placeholder="Ej. Línea premium de accesorios electrónicos"
+                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-primary focus:border-primary outline-none resize-none"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div>
+              <h3 class="text-sm font-bold text-gray-700 border-b border-gray-200 pb-2 mb-4">Descuentos</h3>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+                <!-- P.V.P A -->
+                <div class="flex items-center gap-4">
+                  <label class="w-16 text-sm font-medium text-gray-500">P.V.P A</label>
+                  <div class="relative flex-1">
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">%</span>
+                    <input type="number" formControlName="pvpA" class="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg outline-none focus:border-primary">
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-4">
+                  <label class="w-16 text-sm font-medium text-gray-500">P.V.P B</label>
+                  <div class="relative flex-1">
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">%</span>
+                    <input type="number" formControlName="pvpB" class="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg outline-none focus:border-primary">
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-4">
+                  <label class="w-16 text-sm font-medium text-gray-500">P.V.P C</label>
+                  <div class="relative flex-1">
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">%</span>
+                    <input type="number" formControlName="pvpC" class="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg outline-none focus:border-primary">
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-4">
+                  <label class="w-16 text-sm font-medium text-gray-500">P.V.P D</label>
+                  <div class="relative flex-1">
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">%</span>
+                    <input type="number" formControlName="pvpD" class="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg outline-none focus:border-primary">
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-4">
+                  <label class="w-16 text-sm font-medium text-gray-500">P.V.P E</label>
+                  <div class="relative flex-1">
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">%</span>
+                    <input type="number" formControlName="pvpE" class="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg outline-none focus:border-primary">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </form>
+        </div>
+
+
+        <div class="p-6 border-t border-gray-100 flex justify-end gap-4 bg-gray-50 rounded-b-2xl">
+          <button (click)="cerrarModales()" class="flex items-center gap-2 px-6 py-2.5 rounded-full text-primary font-semibold hover:bg-red-50 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            Cancelar
+          </button>
+          <button (click)="guardarMarca()" [disabled]="marcaForm.invalid" class="flex items-center gap-2 px-6 py-2.5 rounded-full bg-primary text-white font-semibold hover:bg-red-700 transition-colors shadow-md disabled:opacity-50">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+            {{ modoEdicion ? 'Guardar Cambios' : 'Crear Marca' }}
+          </button>
+        </div>
+
+      </div>
+    </div>
+  }
 </div>
