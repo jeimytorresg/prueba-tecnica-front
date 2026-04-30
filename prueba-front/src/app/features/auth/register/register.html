@@ -55,70 +55,115 @@
         Este será tu acceso para gestionar todas las empresas y herramientas del sistema.
       </p>
 
-      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-5">
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-4">
         
+        @if (errorMessage) {
+          <div class="bg-red-50 text-red-500 p-3 rounded-lg text-sm text-center border border-red-100">
+            {{ errorMessage }}
+          </div>
+        }
 
         <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1">Nombre completo <span class="text-primary">*</span></label>
-          <input type="text" formControlName="nombre" placeholder="Ej. Juan Antonio Perez"
+          <label class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+          <input 
+            type="text" 
+            formControlName="nombre"
+            placeholder="Tu nombre"
             class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all"
             [ngClass]="{'border-red-500': registerForm.get('nombre')?.invalid && registerForm.get('nombre')?.touched}">
-        </div>
-
-
-        <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1">Correo electrónico <span class="text-primary">*</span></label>
-          <input type="email" formControlName="correo" placeholder="ejemplo@correo.com"
-            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all"
-            [ngClass]="{'border-red-500': registerForm.get('correo')?.invalid && registerForm.get('correo')?.touched}">
-        </div>
-
-
-        <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1">Contraseña <span class="text-primary">*</span></label>
-          <div class="relative">
-            <input [type]="hidePassword ? 'password' : 'text'" formControlName="contrasena" placeholder="Mínimo 8 caracteres"
-              class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all pr-12"
-              [ngClass]="{'border-red-500': registerForm.get('contrasena')?.invalid && registerForm.get('contrasena')?.touched}">
-            
-            <button type="button" (click)="togglePasswordVisibility('password')" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-primary">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-            </button>
-          </div>
-        </div>
-
-
-        <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1">Confirmar contraseña <span class="text-primary">*</span></label>
-          <div class="relative">
-            <input [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="confirmarContrasena" placeholder="Placeholder"
-              class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all pr-12"
-              [ngClass]="{'border-red-500': (registerForm.get('confirmarContrasena')?.invalid || registerForm.hasError('passwordMismatch')) && registerForm.get('confirmarContrasena')?.touched}">
-            
-            <button type="button" (click)="togglePasswordVisibility('confirm')" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-primary">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-            </button>
-          </div>
-
-          @if (registerForm.hasError('passwordMismatch') && registerForm.get('confirmarContrasena')?.touched) {
-            <span class="text-xs text-red-500 mt-1 block">Las contraseñas no coinciden.</span>
+          
+          @if (registerForm.get('nombre')?.invalid && registerForm.get('nombre')?.touched) {
+            <span class="text-xs text-red-500 mt-1 block">El nombre es requerido</span>
           }
         </div>
 
-
-        <div class="pt-2">
-          <label class="flex items-center gap-3 cursor-pointer">
-            <input type="checkbox" formControlName="terminos" class="w-5 h-5 text-primary border-gray-300 rounded focus:ring-primary accent-primary">
-            <span class="text-sm text-gray-600">Acepto los términos y condiciones y políticas de privacidad</span>
-          </label>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Correo Electrónico</label>
+          <input 
+            type="email" 
+            formControlName="correo"
+            placeholder="usuario@correo.com"
+            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all"
+            [ngClass]="{'border-red-500': registerForm.get('correo')?.invalid && registerForm.get('correo')?.touched}">
+          
+          @if (registerForm.get('correo')?.invalid && registerForm.get('correo')?.touched) {
+            <span class="text-xs text-red-500 mt-1 block">
+              {{ registerForm.get('correo')?.hasError('required') ? 'El correo es requerido' : 'Debe ser un correo válido' }}
+            </span>
+          }
         </div>
 
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
+          <div class="relative">
+            <input 
+              [type]="hidePassword ? 'password' : 'text'" 
+              formControlName="contrasena"
+              placeholder="••••••••"
+              class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all pr-12"
+              [ngClass]="{'border-red-500': registerForm.get('contrasena')?.invalid && registerForm.get('contrasena')?.touched}">
+            
+            <button 
+              type="button" 
+              (click)="togglePasswordVisibility('password')"
+              class="absolute right-3 top-1/2 transform -translate-y-1/2 text-primary hover:text-red-800">
+              <svg *ngIf="hidePassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+              <svg *ngIf="!hidePassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path></svg>
+            </button>
+          </div>
+          
+          @if (registerForm.get('contrasena')?.invalid && registerForm.get('contrasena')?.touched) {
+            <span class="text-xs text-red-500 mt-1 block">La contraseña debe tener al menos 8 caracteres</span>
+          }
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Confirmar Contraseña</label>
+          <div class="relative">
+            <input 
+              [type]="hideConfirmPassword ? 'password' : 'text'" 
+              formControlName="confirmarContrasena"
+              placeholder="••••••••"
+              class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all pr-12"
+              [ngClass]="{'border-red-500': (registerForm.get('confirmarContrasena')?.invalid || registerForm.hasError('passwordMismatch')) && registerForm.get('confirmarContrasena')?.touched}">
+            
+            <button 
+              type="button" 
+              (click)="togglePasswordVisibility('confirm')"
+              class="absolute right-3 top-1/2 transform -translate-y-1/2 text-primary hover:text-red-800">
+              <svg *ngIf="hideConfirmPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+              <svg *ngIf="!hideConfirmPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path></svg>
+            </button>
+          </div>
+          
+          @if (registerForm.hasError('passwordMismatch') && registerForm.get('confirmarContrasena')?.touched) {
+            <span class="text-xs text-red-500 mt-1 block">Las contraseñas no coinciden</span>
+          }
+        </div>
+
+        <div class="flex items-center gap-2 py-2">
+          <input type="checkbox" formControlName="terminos" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary accent-primary">
+          <span class="text-xs text-gray-600">Acepto los <a href="#" class="text-primary hover:underline">términos y condiciones</a></span>
+        </div>
+            
         <div class="flex items-center justify-between pt-6">
           <button type="button" routerLink="/login" class="px-6 py-3 rounded-full bg-gray-100 text-gray-400 font-semibold text-sm hover:bg-gray-200 transition-colors">
             Regresar
           </button>
-          <button type="submit" [disabled]="registerForm.invalid" class="px-6 py-3 rounded-full bg-primary text-white font-semibold text-sm hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md">
-            Siguiente: Registra tu empresa
+          <button 
+            type="submit" 
+            [disabled]="registerForm.invalid || isLoading"
+            class="px-6 py-3 rounded-full bg-primary text-white font-semibold text-sm hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md flex items-center gap-2">
+            
+            @if (isLoading) {
+              <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Procesando...
+            } @else {
+              Siguiente: Registra tu empresa
+            }
           </button>
         </div>
 

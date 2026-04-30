@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AuthService } from '../../../core/services/auth.service';
 
 export const passwordMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
   const password = control.get('contrasena');
@@ -24,8 +25,11 @@ export class Register {
   
   private fb = inject(FormBuilder);
   private router = inject(Router);
+  private authService = inject(AuthService);
 
   registerForm: FormGroup;
+  errorMessage: string = '';
+  isLoading: boolean = false;
   
 
   hidePassword = true;
@@ -56,9 +60,31 @@ export class Register {
 
   onSubmit() {
     if (this.registerForm.valid) {
-      console.log('Cuenta creada con éxito:', this.registerForm.value);
+      this.isLoading = true;
+      this.errorMessage = '';
 
-      this.router.navigate(['/admin/marcas']);
+      const userData = {
+        name: this.registerForm.value.nombre,
+        email: this.registerForm.value.correo,
+        password: this.registerForm.value.contrasena
+      };
+
+      this.authService.register(userData).subscribe({
+        next: () => {
+          this.isLoading = false;
+          // After registration, we could log them in or redirect to login
+          this.router.navigate(['/login']);
+        },
+        error: (error) => {
+          this.isLoading = false;
+          if (error.status === 409) {
+            this.errorMessage = 'El correo ya está en uso.';
+          } else {
+            this.errorMessage = 'Ocurrió un error al registrar. Intente de nuevo.';
+          }
+          console.error('Registration error:', error);
+        }
+      });
     } else {
       this.registerForm.markAllAsTouched();
     }
