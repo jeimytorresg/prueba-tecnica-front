@@ -64,7 +64,7 @@ export class Register {
       this.errorMessage = '';
 
       const userData = {
-        name: this.registerForm.value.nombre,
+        fullName: this.registerForm.value.nombre,
         email: this.registerForm.value.correo,
         password: this.registerForm.value.contrasena
       };
