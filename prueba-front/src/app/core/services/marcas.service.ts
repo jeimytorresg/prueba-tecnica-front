@@ -20,7 +20,7 @@ export interface Marca {
 })
 export class MarcasService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://104.236.31.102/marcas';
+  private apiUrl = 'http://104.236.31.102/api/marcas';
 
   private marcasCache = signal<Marca[]>([]);
   private loaded = false;

@@ -15,7 +15,7 @@ export interface User {
 export class AuthService {
   private http = inject(HttpClient);
   private platformId = inject(PLATFORM_ID);
-  private apiUrl = 'http://104.236.31.102/auth';
+  private apiUrl = 'http://104.236.31.102/api/auth';
 
   currentUser = signal<User | null>(null);
 
