@@ -1,19 +1,1 @@
-import { Routes } from '@angular/router';
-import { Login } from './features/auth/login/login';
-import { Register } from './features/auth/register/register';
-import { MarcasList } from './features/marcas/marcas-list/marcas-list';
-import { MainLayout } from './layout/main-layout/main-layout';
-import { authGuard } from './core/guards/auth.guard';
-
-export const routes: Routes = [
-    { path: '', redirectTo: 'login', pathMatch: 'full' },
-    {path: 'login', component: Login},
-    {path: 'register', component: Register},
-    {   path: '', 
-        component: MainLayout,
-        canActivate: [authGuard],
-        children: [
-            {path: 'marcas', component: MarcasList}
-        ]
-    }
-];
+import { Routes } from '@angular/router';import { Login } from './features/auth/login/login';import { Register } from './features/auth/register/register';import { MarcasList } from './features/marcas/marcas-list/marcas-list';import { MainLayout } from './layout/main-layout/main-layout';import { authGuard } from './core/guards/auth.guard';export const routes: Routes = [    { path: '', redirectTo: 'login', pathMatch: 'full' },    {path: 'login', component: Login},    {path: 'register', component: Register},    {   path: '',         component: MainLayout,        canActivate: [authGuard],        children: [            {path: 'marcas', component: MarcasList}        ]    }];
